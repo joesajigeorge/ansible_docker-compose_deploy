@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  container_a:
+    image: example_container_a
+    build:
+      context: container_a/.
+      dockerfile: Dockerfile
+    networks:
+      - bridge_network
+
+  container_b:
+    image: example_container_b
+    build:
+      context: container_b/.
+      dockerfile: Dockerfile
+    networks:
+      - bridge_network
+
+  container_c:
+    image: example_container_c
+    build:
+      context: container_c/.
+      dockerfile: Dockerfile
+    networks:
+      - bridge_network
+
+
+networks:
+  bridge_network:
+    driver: bridge
