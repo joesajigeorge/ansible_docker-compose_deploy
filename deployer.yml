@@ -1,0 +1,28 @@
+---
+- name: Deploy containers
+  hosts: localhost
+  gather_facts: false
+  become: yes
+
+  tasks:
+  - name: Install docker and docker-compose
+    apt:
+      name: docker.io, docker-compose
+      state: present
+
+  - name: Copy docker-compose.yml
+    copy:
+      content: "{{ lookup('file', 'docker/docker-compose.yml') }}"
+      dest: /opt/docker-compose.yml
+
+  - name: Deploy containers
+    docker_compose:
+      project_name: my_app
+      file: /opt/docker-compose.yml
+      state: present
+
+  - name: Scale up the containers
+    docker_service:
+      name: container_a,container_b,container_c
+      state: scaled
+      scale: 2
