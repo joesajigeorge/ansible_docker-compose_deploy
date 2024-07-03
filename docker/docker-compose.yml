@@ -2,26 +2,17 @@ version: '3'
 
 services:
   container_a:
-    image: example_container_a
-    build:
-      context: container_a/.
-      dockerfile: Dockerfile
+    image: sajigeorgejoe/my_test_container_a
     networks:
       - bridge_network
 
   container_b:
-    image: example_container_b
-    build:
-      context: container_b/.
-      dockerfile: Dockerfile
+    image: sajigeorgejoe/my_test_container_b
     networks:
       - bridge_network
 
   container_c:
-    image: example_container_c
-    build:
-      context: container_c/.
-      dockerfile: Dockerfile
+    image: sajigeorgejoe/my_test_container_c
     networks:
       - bridge_network
 
