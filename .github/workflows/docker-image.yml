@@ -1,4 +1,4 @@
-name: NodeJS Docker Demo
+name: Ansible container deployment
 
 on:
   push:
