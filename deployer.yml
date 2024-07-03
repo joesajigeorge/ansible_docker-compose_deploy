@@ -1,14 +1,56 @@
 ---
 - name: Deploy containers
-  hosts: localhost
-  gather_facts: false
+  hosts: localservers
+  gather_facts: true
   become: yes
 
   tasks:
-  - name: Install docker and docker-compose
+  - name: Install dependencies
     apt:
-      name: docker.io, docker-compose
+      name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg2
+          - software-properties-common
       state: present
+      cache_valid_time: 86400
+
+  - name: Add docker gpg apt key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: Add docker repository
+    ansible.builtin.apt_repository:
+      repo: deb https://download.docker.com/linux/ubuntu jammy stable
+      state: present
+      update_cache: true
+
+  - name: Install docker-ce
+    apt:
+      name: docker-ce
+      state: present
+      cache_valid_time: 86400
+
+  - name: Run and enable docker
+    service:
+      name: docker
+      state: started
+      enabled: yes
+
+  - name: Install docker-compose v2 plugin
+    apt:
+      name: docker-compose-plugin
+      state: present
+      cache_valid_time: 86400
+
+  - name: Install docker-compose 
+    get_url:
+      url: https://github.com/docker/compose/releases/download/v2.28.1/docker-compose-linux-x86_64
+      dest: /usr/local/bin/docker-compose
+      mode: 'a+x'
+      force: yes
 
   - name: Copy docker-compose.yml
     copy:
@@ -16,13 +58,14 @@
       dest: /opt/docker-compose.yml
 
   - name: Deploy containers
-    docker_compose:
+    community.docker.docker_compose_v2:
       project_name: my_app
-      file: /opt/docker-compose.yml
+      project_src: /opt
+      files: docker-compose.yml
       state: present
 
   - name: Scale up the containers
-    docker_service:
+    community.docker.docker_compose_v2:
       name: container_a,container_b,container_c
       state: scaled
       scale: 2
