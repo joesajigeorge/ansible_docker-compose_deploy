@@ -2,17 +2,17 @@ version: '3'
 
 services:
   container_a:
-    image: sajigeorgejoe/my_test_container_a
+    image: sajigeorgejoe/my_test_container_a:github
     networks:
       - bridge_network
 
   container_b:
-    image: sajigeorgejoe/my_test_container_b
+    image: sajigeorgejoe/my_test_container_b:github
     networks:
       - bridge_network
 
   container_c:
-    image: sajigeorgejoe/my_test_container_c
+    image: sajigeorgejoe/my_test_container_c:github
     networks:
       - bridge_network
 
