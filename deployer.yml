@@ -57,6 +57,11 @@
       content: "{{ lookup('file', 'docker/docker-compose.yml') }}"
       dest: /opt/docker-compose.yml
 
+  - name: Log into DockerHub
+    docker_login:
+      username: "{{ lookup('env', 'DOCKER_USERNAME') }}"
+      password: "{{ lookup('env', 'DOCKER_PASSWORD') }}"
+      
   - name: Deploy containers
     community.docker.docker_compose_v2:
       project_name: my_app
@@ -66,6 +71,11 @@
 
   - name: Scale up the containers
     community.docker.docker_compose_v2:
-      name: container_a,container_b,container_c
-      state: scaled
-      scale: 2
+      project_name: my_app
+      project_src: /opt
+      files: docker-compose.yml
+      scale:
+        container_a: 2
+        container_b: 2
+        container_c: 2
+      state: present
