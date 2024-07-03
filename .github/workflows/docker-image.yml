@@ -2,9 +2,9 @@ name: Ansible container deployment
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 env:
   IMAGE_NAME: sajigeorgejoe/my_test_container
